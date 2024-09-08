@@ -1,0 +1,30 @@
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import AuthNavigator from './src/navigation/AuthNavigatorcopy';
+import BottomNavigator from './src/navigation/BottomNavigator';
+import { supabase } from './src/lib/supabase';
+import { Session } from '@supabase/supabase-js';
+
+const App = () => {
+
+  const [session, setSession] = useState<Session | null>(null)
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [])
+
+
+  return (
+    <NavigationContainer>
+      {session ? <BottomNavigator /> : <AuthNavigator />}
+    </NavigationContainer>
+  );
+};
+
+export default App;

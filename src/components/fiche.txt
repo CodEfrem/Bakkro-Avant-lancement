@@ -1,0 +1,89 @@
+import React from "react";
+import { View, ScrollView, Platform, Image, Touchable, TouchableOpacityBase, TouchableOpacity, Linking } from "react-native";
+import { Avatar, Button, Card, Text } from 'react-native-paper';
+
+
+// Définir le type des props attendues pour LeftContent
+interface LeftContentProps {
+    color?: string; // Exemple de prop facultative
+}
+
+const LeftContent: React.FC<LeftContentProps> = ({ color }) => <Avatar.Icon color={color} icon="folder" />;
+
+const dataActualities = [
+    { id: 1, title: 'Villa Moderne', size: '177 m²', rooms: '4chambres', street: 'Abatta, Bingerville', prices: '500 000 000 XOF', Image: 'https://picsum.photos/700', Screen: '' },
+    { id: 2, title: 'Villa avec Piscine', size: '177 m²', rooms: '4chambres', street: 'Abatta, Bingerville', prices: '500 000 000 XOF', Image: 'https://picsum.photos/700', Screen: '' },
+    { id: 3, title: 'Track Order', size: '177 m²', rooms: '4chambres', street: 'Abatta, Bingerville', prices: '500 000 000 XOF', Image: 'https://picsum.photos/700', Screen: '' }
+];
+
+
+
+
+const FavoritesScreen = () => {
+    const handleCardPress = (url: string) => {
+        Linking.openURL(url);
+    };
+
+
+    return (
+        <ScrollView style={{ height: '100%', marginTop: 100 }}>
+            <Text variant="titleLarge" style={{ paddingLeft: 25 }}>
+                Les Plus Polulaire
+            </Text>
+
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{
+                flex: 1, marginTop: 20, flexDirection: 'row',
+                paddingLeft: 25
+            }}>
+                {dataActualities.map(actu =>
+                    <TouchableOpacity onPress={() => handleCardPress(actu.Screen)}>
+                        <Card style={{
+                            width: 223.67,
+                            height: 123.53,
+                            marginRight: 20,
+                            flexShrink: 0,
+                            // borderRadius: 6,
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: 0,
+                            borderWidth: 0,
+                            backgroundColor: 'white',
+                            shadowOpacity: 0,
+                            shadowColor: 'white',
+                            shadowOffset: {width: 0.1, height: 0.1},
+                            shadowRadius: 0,
+
+                            ...Platform.select({
+                                android: {
+                                    elevation: 5,
+                                    borderWidth: 0, // Supprimer la bordure si nécessaire
+                                },
+                                ios: {
+                                    shadowOpacity: 0,
+                                }
+                            }),
+                        }}>
+                            <Card.Cover source={{ uri: actu.Image }} style={{ height: 123.53, borderBottomLeftRadius: 0, borderBottomRightRadius: 0,borderWidth: 0 }} />
+
+                        
+                        </Card>
+                            <View style={{flex: 1, paddingLeft: 10, marginTop: 10, paddingBottom: 10 }}>
+                                <Text variant="titleSmall">{actu.title}</Text>
+                                <Text variant="bodySmall">{actu.size} . {actu.rooms}</Text>
+                                <Text variant="bodySmall">{actu.street}</Text>
+                                <Text variant="titleSmall" style={{}}>{actu.prices}</Text>
+                            </View>
+                    </TouchableOpacity>
+
+                )}
+
+
+            </ScrollView>
+
+        </ScrollView>
+
+    );
+};
+
+export default  FavoritesScreen; // Exportation du composant par défaut
+
+

@@ -1,0 +1,26 @@
+async function get_transaction_by_user_and_video(primaryKey, propertyId) {
+    const { data: transaction, error } = await supabase
+      .from('transactions')
+      .select('*')
+      .eq('user_id', primaryKey)
+      .eq('property_id', propertyId)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') {
+      throw error;
+    }
+    if (transaction) {
+      return true; // Problème : Pas de vérification de la date de transaction
+    }
+    
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', primaryKey)
+      .single();
+    if (userError) throw userError;
+    if (user.subscription !== 'free') {
+      return true; // Problème : Pas de vérification du délai d'abonnement
+    } 
+    return false;
+}
